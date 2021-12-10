@@ -1,8 +1,12 @@
+#include<random>
+
 #include "BgLevelGenerator.h"
 #include "LevelGenerator.h"
 
 void BgLevelGenerator::createLevel(int width, int height, bool distant, int type, Level* level)
 {
+
+    //width=2048,height=15
 	BgLevelGenerator bgLevelGenerator(width, height, distant, type);
     bgLevelGenerator.createLevel(level);
 }
@@ -17,41 +21,42 @@ void BgLevelGenerator::createLevel(Level* level)
 		int offs = distant ? 2 : 1;
 		int oh = rand() % range + offs;
 		int h = rand() % range + offs;
+        //2<=(oh,h)<=5或1<=(oh,h)<=7
 		for (int x = 0; x < width; x++)
 		{
 			oh = h;
 			while (oh == h)
 			{
 				h = rand() % range + offs;
-			}
+            }//使oh!=h
 			for (int y = 0; y < height; y++)
 			{
-				int h0 = (oh < h) ? oh : h;
-				int h1 = (oh < h) ? h : oh;
-				if (y < h0)
+                int h0 = (oh < h) ? oh : h;//the smaller one
+                int h1 = (oh < h) ? h : oh;//the bigger one
+                if (y < h0)//[,h0)
 				{
 					if (distant) {
 						int s = 2;
 						if (y < 2) {
 							s = y;
-						}
-                        level->setBlock(x, y, (uint8_t)(4 + s * 8));
+                        }//s equals the smaller one,which is 0 or 1
+                        level->setBlock(x, y, (uint8_t)(4 + s * 8));//4 or 12
 					}
 					else {
                         level->setBlock(x, y, (uint8_t)5);
 					}
 				}
-				else if (y == h0) {
+                else if (y == h0) {//h0
 					int s = h0 == h ? 0 : 1;
 					s += distant ? 2 : 0;
                     level->setBlock(x, y, (uint8_t)s);
 				}
-				else if (y == h1) {
+                else if (y == h1) {//h1
 					int s = h0 == h ? 0 : 1;
-					s += distant ? 2 : 0;
+                    s += distant ? 2 : 0;//s是2或3
                     level->setBlock(x, y, (uint8_t)(s + 16));
 				}
-				else {
+                else {//(h0,h1) && (h1,)
 					int s = y > h1 ? 1 : 0;
 					if (h0 == oh)
 					{

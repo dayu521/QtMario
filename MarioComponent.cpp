@@ -17,6 +17,7 @@ using namespace std;
 MarioComponent::MarioComponent(QWidget *parent)
     : QMainWindow(parent)
 {
+    //不包括标题的窗口大小
     this->setFixedSize(640, 480);
 
     setWindowIcon(QIcon(":/resources/Mario.ico"));

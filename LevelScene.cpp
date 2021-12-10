@@ -20,6 +20,8 @@
 #include<iostream>
 #include<algorithm>
 #include<math.h>
+
+#include<QPainterPath>
 using namespace std;
 
 LevelScene::LevelScene()

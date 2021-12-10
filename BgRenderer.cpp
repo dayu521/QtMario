@@ -5,16 +5,18 @@
 #include<QPainter>
 #include<QPixmap>
 
-BgRenderer::BgRenderer(int levelWidth, int levelHeight, int width, int height, int distance)
+BgRenderer::BgRenderer(int levelWidth/*2048*/, int levelHeight/*15*/, int width, int height, int distance)
 {
     this->distance = distance;
-    this->width = width;
-    this->height = height;
+    this->width = width;//和窗口width一致640
+    this->height = height;//窗口height一致480
+    //创建level2048*15
     this->level.reset(new Level(levelWidth, levelHeight));
 }
 
 void BgRenderer::render(QPainter &painter, int xCam, int yCam)
 {
+    //渲染区域是64*96
     xCam /= distance;
     yCam /= distance;
     int xTileStart = xCam / 64;
