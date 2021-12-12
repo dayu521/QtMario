@@ -19,46 +19,43 @@ void BgLevelGenerator::createLevel(Level* level)
 	{
 		int range = distant ? 4 : 6;
 		int offs = distant ? 2 : 1;
-		int oh = rand() % range + offs;
-		int h = rand() % range + offs;
-        //2<=(oh,h)<=5或1<=(oh,h)<=7
-		for (int x = 0; x < width; x++)
+        int h0 = rand() % range + offs;//第一个小场景像素个数
+        int h1 = rand() % range + offs;//第二个小小场景像素个数
+        //2<=(oh,h)<=5或1<=(oh,h)<=6
+        for (int x = 0; x < width; x++)//竖直渲染
 		{
-			oh = h;
-			while (oh == h)
+            h0 = h1;//保留其中一个
+            while (h0 == h1)
 			{
-				h = rand() % range + offs;
-            }//使oh!=h
+                h1 = rand() % range + offs;
+            }//使h0!=h1
+            int min_h = (h0 < h1) ? h0 : h1;//the smaller one
+            int max_h = (h0 < h1) ? h1 : h0;//the bigger one
 			for (int y = 0; y < height; y++)
 			{
-                int h0 = (oh < h) ? oh : h;//the smaller one
-                int h1 = (oh < h) ? h : oh;//the bigger one
-                if (y < h0)//[,h0)
+                if (y < min_h)//天空或空白(透明)像素块
 				{
-					if (distant) {
-						int s = 2;
-						if (y < 2) {
-							s = y;
-                        }//s equals the smaller one,which is 0 or 1
-                        level->setBlock(x, y, (uint8_t)(4 + s * 8));//4 or 12
+                    if (distant) {//天空
+                        int s = y > 2 ? 2 : y;//s是0,1,2
+                        level->setBlock(x, y, (uint8_t)(4 + s * 8));//4,12,20
 					}
 					else {
-                        level->setBlock(x, y, (uint8_t)5);
+                        level->setBlock(x, y, (uint8_t)5);//空白(透明)
 					}
 				}
-                else if (y == h0) {//h0
-					int s = h0 == h ? 0 : 1;
+                else if (y == min_h) {//第一个蘑菇头的像素块
+                    int s = min_h == h1 ? 0 : 1;
 					s += distant ? 2 : 0;
                     level->setBlock(x, y, (uint8_t)s);
 				}
-                else if (y == h1) {//h1
-					int s = h0 == h ? 0 : 1;
+                else if (y == max_h) {//第二个蘑菇头的像素块
+                    int s = min_h == h1 ? 0 : 1;
                     s += distant ? 2 : 0;//s是2或3
                     level->setBlock(x, y, (uint8_t)(s + 16));
 				}
-                else {//(h0,h1) && (h1,)
-					int s = y > h1 ? 1 : 0;
-					if (h0 == oh)
+                else {//蘑菇体
+                    int s = y > max_h ? 1 : 0;
+                    if (min_h == h0)
 					{
 						s = 1 - s;
 					}
@@ -207,6 +204,6 @@ BgLevelGenerator::BgLevelGenerator(int width, int height, bool distant, int type
 {
 	this->width = width;
 	this->height = height;
-	this->distant = distant;
+    this->distant = distant;//远景还是前景.远景是蓝色的天空和柱子,近景是黄色的柱子
 	this->type = type;
 }

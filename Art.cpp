@@ -31,7 +31,7 @@ void Art::init()
     cutImage(":/resources/mapsheet.png", 16, 16, level);
     cutImage(":/resources/particlesheet.png", 8, 8, particles);
     cutImage(":/resources/font.gif", 8, 8, font);
-    cutImage(":/resources/bgsheet.png", 32, 32, bg);
+    cutImage(":/resources/bgsheet.png", 32, 32, bg);//256*320
     cutImage(":/resources/worldmap.png", 16, 16, map);
     cutImage(":/resources/endscene.gif", 96, 96, endScene);
     cutImage(":/resources/gameovergost.gif", 96, 64, gameOver);
@@ -80,6 +80,7 @@ void Art::cutImage(const QString &path, int xSize, int ySize, vector<vector<QIma
     for(int i = 0; i < width; i++) {
         images[i].resize(height);
     }
+    //取整
 
     for (int x = 0; x < width; x++)
     {
@@ -88,5 +89,6 @@ void Art::cutImage(const QString &path, int xSize, int ySize, vector<vector<QIma
             images.at(x).at(y) = image.copy(x * xSize, y * ySize, xSize, ySize);
         }
     }
+    //以xSize*ySize为元素进行复制
 }
 

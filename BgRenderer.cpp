@@ -7,7 +7,7 @@
 
 BgRenderer::BgRenderer(int levelWidth/*2048*/, int levelHeight/*15*/, int width, int height, int distance)
 {
-    this->distance = distance;
+    this->distance = distance;//场景漂浮速度
     this->width = width;//和窗口width一致640
     this->height = height;//窗口height一致480
     //创建level2048*15
@@ -29,8 +29,8 @@ void BgRenderer::render(QPainter &painter, int xCam, int yCam)
         for(int y = yTileStart; y <= yTileEnd; y++)
         {
             int b = level->getBlock(x, y) & 0xff;
-            QRectF rect((x << 6) - xCam, (y << 6) - yCam - 32, 2 * Art::bg[b % 8][b / 8].width(), 2 * Art::bg[b % 8][b / 8].height());
-            painter.drawImage(rect, Art::bg[b % 8][b / 8]);
+            QRectF rect((x << 6) - xCam, (y << 6) - yCam/* - 32 注释掉这个貌似也没问题*/, 2 * Art::bg[b % 8][b / 8].width(), 2 * Art::bg[b % 8][b / 8].height());
+            painter.drawImage(rect, Art::bg[b % 8][b / 8]);//把原像素图放大2倍
         }
     }
 }

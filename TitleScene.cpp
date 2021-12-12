@@ -44,8 +44,8 @@ void TitleScene::tick()
 void TitleScene::render(QPainter &painter)
 {
     //auto sllTick=llTick % (2048 * 32)
-    bgLayer[1]->render(painter, llTick >= 2048 * 32? llTick - 2048 * 32 : llTick, 0);
-    bgLayer[0]->render(painter, llTick >= 2048 * 32? llTick - 2048 * 32 : llTick, 0);
+    bgLayer[1]->render(painter, llTick >= 2048 * 32? llTick - 2048 * 32 : llTick, 0);//后两层滚动
+    bgLayer[0]->render(painter, llTick >= 2048 * 32? llTick - 2048 * 32 : llTick, 0);//最外层滚动,覆盖上一个
 
     int yo = 32-abs((int)(sin(llTick/6.0)*16));
     QRectF logoRect(0, yo, Art::logo.width() * 2, Art::logo.height() * 2);
